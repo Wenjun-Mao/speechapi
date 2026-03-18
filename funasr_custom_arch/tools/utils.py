@@ -21,7 +21,9 @@ def load_audio(wav_path, rate: int = None, offset: float = 0, duration: float = 
             audio_tensor = audio_tensor.unsqueeze(0)
         else:
             audio_tensor = audio_tensor.T
-        resampler = torchaudio.transforms.Resample(orig_freq=f.samplerate, new_freq=rate)
+        resampler = torchaudio.transforms.Resample(
+            orig_freq=f.samplerate, new_freq=rate
+        )
         audio_tensor = resampler(audio_tensor)
         if audio_tensor.shape[0] == 1:
             audio_tensor = audio_tensor.squeeze(0)
@@ -52,6 +54,6 @@ def forced_align(log_probs: torch.Tensor, targets: torch.Tensor, blank: int = 0)
                     "score": round(score, 3),
                 }
             )
-    except:
+    except Exception:
         pass
     return items
