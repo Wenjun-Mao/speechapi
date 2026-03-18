@@ -1,0 +1,26 @@
+services:
+  speech-api:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: funasr-api
+    ports:
+      - "8000:8000"
+    volumes:
+      # Map the models directory so downloaded models persist across container restarts
+      - ./models:/app/models
+      # Map the data directory in case you ever want to mount/debug temporary audio files
+      - ./data:/app/data
+    restart: unless-stopped
+    
+    # -------------------------------------------------------------
+    # OPTIONAL: Uncomment the 'deploy' block below if you have 
+    # Nvidia Docker toolkit installed and want to use your GPU!
+    # -------------------------------------------------------------
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
