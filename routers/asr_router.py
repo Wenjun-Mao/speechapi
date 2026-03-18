@@ -1,4 +1,5 @@
 import os
+import time
 from fastapi import APIRouter, HTTPException, BackgroundTasks
 from pydantic import BaseModel
 import logging
@@ -41,14 +42,21 @@ async def transcribe_audio_url(request: ASRRequest, background_tasks: Background
     local_audio_path = None
     try:
         # Step 1: Download the file to a temporary location locally
+        t0 = time.time()
         local_audio_path = await download_audio_from_url(request.url)
+        t1 = time.time()
+        logger.info(f" 🟢 [TIMING] Audio Download: {t1 - t0:.2f} seconds")
 
         # Ensures that no matter what, the file gets deleted after returning
         background_tasks.add_task(cleanup_file, local_audio_path)
 
         # Step 2: Acquire the preloaded FunASR logic instance and transcribe
         asr = get_asr_service()
+        t2 = time.time()
         text = asr.transcribe(local_audio_path)
+        t3 = time.time()
+        logger.info(f" 🟢 [TIMING] ASR Inference: {t3 - t2:.2f} seconds")
+        logger.info(f" 🟢 [TIMING] Total Process: {t3 - t0:.2f} seconds")
 
         # Step 3: Return response in format
         return ASRResponse(text=text, success=True)
