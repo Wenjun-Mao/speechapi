@@ -1,23 +1,36 @@
-def main():
-    import os
-    os.environ["MODELSCOPE_CACHE"] = "./models"
-    
-    from funasr import AutoModel
+from fastapi import FastAPI
+from contextlib import asynccontextmanager
+import logging
 
-    model_dir = "FunAudioLLM/Fun-ASR-Nano-2512"
+from routers.asr_router import router as asr_router
+from services.asr_service import get_asr_service
 
-    wav_path = "./data/1.mp3"
-    model = AutoModel(
-        model=model_dir,
-        device="cuda:0",
-        disable_update=True,
-        trust_remote_code=True,
-        remote_code="./funasr_custom_arch/model.py",
-    )
-    res = model.generate(input=[wav_path], cache={}, batch_size=1, language="中文", itn=True)
-    text = res[0]["text"]
-    print(text)
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup behavior: Pre-load the 800M param model so we don't load it on the first request
+    logger.info("Starting up API, initializing FunASR model...")
+    get_asr_service()
+    yield
+    # Shutdown behavior
+    logger.info("Shutting down API...")
+
+app = FastAPI(
+    title="SpeechAPI with FunASR", 
+    description="ASR endpoint for recognizing Audio URLs using Fun-ASR-Nano",
+    lifespan=lifespan
+)
+
+# Feature routing
+app.include_router(asr_router)
+
+@app.get("/health")
+def health_check():
+    return {"status": "healthy", "service": "SpeechAPI"}
 
 if __name__ == "__main__":
-    main()
+    import uvicorn
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+
