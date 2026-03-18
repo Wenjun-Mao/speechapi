@@ -10,8 +10,8 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
-# Install uv (The incredibly fast Python package manager)
-RUN pip install uv
+# The "Gold Standard" way to install uv in Docker using multi-stage builds
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 # Copy the dependency files
 # We do this before copying the code to maximize Docker layer caching
