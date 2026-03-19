@@ -1,0 +1,21 @@
+=== COMPILED STATS ===
+File: data/1.mp3
+  Mean   : 8.560 s
+  StdDev : 0.514 s
+  Min/Max: 7.893 s / 9.534 s
+File: data/2.wav
+  Mean   : 1.481 s
+  StdDev : 0.291 s
+  Min/Max: 1.363 s / 2.655 s
+
+
+==================================================
+=== FINAL COMPARISON (Mean Latency) ===
+File: data/1.mp3
+  Standard : 8.645 s
+  Compiled : 8.560 s
+  Result   : COMPILED IS FASTER by 1.0% 🚀
+File: data/2.wav
+  Standard : 1.517 s
+  Compiled : 1.481 s
+  Result   : COMPILED IS FASTER by 2.4% 🚀
