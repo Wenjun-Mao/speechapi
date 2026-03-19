@@ -1,11 +1,11 @@
 info:
-  name: Local test
+  name: deayng7 Local test
   type: http
-  seq: 2
+  seq: 5
 
 http:
   method: POST
-  url: http://localhost:8000/api/v1/asr/transcribe
+  url: http://localhost:18123/api/v1/asr/transcribe
   headers:
     - name: Content-Type
       value: application/json

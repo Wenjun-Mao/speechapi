@@ -1,0 +1,24 @@
+info:
+  name: wanyouwan test
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: https://deyang7-5103.wanyouwan.cn:5102/api/v1/asr/transcribe
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "url": "https://xbuibg.cn/uploads/yang_audio/2026-03-17/fjrdwbm1621561910/176334789_1773731440_2064.mp3"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

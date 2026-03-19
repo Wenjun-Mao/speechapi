@@ -1,0 +1,24 @@
+info:
+  name: Mao Local test
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: http://localhost:8000/api/v1/asr/transcribe
+  headers:
+    - name: Content-Type
+      value: application/json
+  body:
+    type: json
+    data: |-
+      {
+        "url": "https://xbuibg.cn/uploads/yang_audio/2026-03-17/fjrdwbm1621561910/176334789_1773731440_2064.mp3"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
